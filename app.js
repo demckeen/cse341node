@@ -43,7 +43,7 @@ const authRoutes = require('./routes/auth');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: 'somethinghere', resave: false, saveUninitialized: false, store: store}));
+app.use(session({secret: 'somethinghere', resave: false, saveUninitialized: false, store: store, sameSite: "lax"}));
 app.use(csrfProtection);
 app.use(flash());
 

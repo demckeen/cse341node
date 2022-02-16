@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Spartan:wght@400;500&display=swap');
 
 * {
   box-sizing: border-box;
@@ -7,7 +7,8 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  background-color: #daf0c8;
 }
 
 main {
@@ -34,7 +35,7 @@ form {
 .main-header {
   width: 100%;
   height: 3.5rem;
-  background-color: #00695c;
+  background-color: #61b120;
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
@@ -60,9 +61,19 @@ form {
   padding: 0;
 }
 
+.accountLink {margin: 0;}
+
+.logoutLink {margin-top: 3px;}
+
+.main-header__item i {
+  margin: 0;
+  font-size: 28px;
+}
+
 .main-header__item a, .main-header__item button {
   text-decoration: none;
   color: white;
+  font-family: 'Spartan', sans-serif;
 }
 
 .main-header__item button {background: none;
@@ -76,7 +87,8 @@ form {
 .main-header__item a.active,
 .main-header__item button:hover,
 .main-header__item button:active {
-  color: #ffeb3b;
+  color: #006370;
+  font-weight: 600;
 }
 
 .mobile-nav {
@@ -128,6 +140,24 @@ form {
   border-radius: 3px;
 }
 
+h1.shopName {
+  font-family: 'Spartan', sans-serif;
+  color: #003b42;
+  margin-top: 25.5px;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoArea i {
+  color: #003b42;
+  margin-right: 10px;
+  font-size: 1.5rem;
+}
+
 #side-menu-toggle {
   border: 1px solid white;
   font: inherit;
@@ -167,7 +197,15 @@ form {
 }
 
 .card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 1px 3px 10px rgba(0, 56, 63, 0.26);
+  background-color: white;
+  border-radius: 8px;
+  border: none;
+  transition: all .3s ease-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }
 
 .card__header,
@@ -175,23 +213,43 @@ form {
   padding: 1rem;
 }
 
+.card__header {
+  background-color:#006370;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
 .card__header h1,
-.card__content h1,
-.card__content h2,
+.card__content h1 {
+  margin: 0;
+  font-family: 'Spartan', sans-serif;
+  font-weight: 400;
+}
+
+.card__content h2 {
+  margin: 0;
+  font-family: 'Spartan', sans-serif;
+}
+
 .card__content p {
   margin: 0;
+  padding-top: 5px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .card__image {
   width: 100%;
+  height: 200px;
 }
 
 .card__image img {
-  width: 100%;
+  width: 320px;
+  height: 200px;
+  object-fit: cover;
 }
 
 .card__actions {
-  padding: 1rem;
+  padding-bottom: 1.5rem;
   text-align: center;
 }
 
@@ -205,16 +263,17 @@ form {
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
-  border: 1px solid #00695c;
-  color: #00695c;
-  background: white;
+  border: 1px solid #108696;
+  color: white;
+  background: #00a4b9;
   border-radius: 3px;
   cursor: pointer;
+  transition: all .3s ease-out;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #00695c;
+  background-color: #006370;
   color: white;
 }
 
