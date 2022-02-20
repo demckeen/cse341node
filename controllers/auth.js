@@ -302,9 +302,11 @@ exports.getNewPassword = (req, res, next) => {
             }
         })
         .then(user => {
-            let cartLength = req.user.cart.items.reduce(function(a,b) {
+            let cartLength = '';
+            
+            if(req.user) { cartLength = req.user.cart.items.reduce(function(a,b) {
                 return parseInt(`${a}`) + parseInt(`${b.quantity}`);
-              }, 0);
+              }, 0);}
             let errorMessage = req.flash('error');
             if (errorMessage.length > 0) {
                 errorMessage = errorMessage[0];
