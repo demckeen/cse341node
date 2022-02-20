@@ -32,6 +32,8 @@
   text-decoration: none;
 }
 
+#plusBtn {margin-top: 4px;}
+
 @media (min-width: 768px) {
   .cart__item {
     flex-direction: row;
