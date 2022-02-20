@@ -12,17 +12,16 @@
         <% } else if (successMessage) { %>
             <div class="message"><%= successMessage %></div>
         <% } %>
-        <div class="contentArea formArea">    
-            <h1 class="pageTitle">Update Password</h1>
-            <form class="auth-form" action="/set-password" method="POST">
+        <div class="contentArea formArea">
+            <h1 class="pageTitle">Update Email</h1>
+            <form class="auth-form" action="/update-email" method="POST">
                 <div class="form-control">
-                    <label for="password">New Password</label>
-                    <input type="password" name="password" id="password">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email">
                 </div>
                 <input type="hidden" name="userId" value="<%= userId %>">
-                <input type="hidden" name="passwordToken" value="<%= passwordToken %>">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button class="btn" type="submit">Set New Password</button>
+                <button class="btn" type="submit">Update Email</button>
             </form>
         </div>        
     </main>

@@ -35,7 +35,7 @@ form {
 .main-header {
   width: 100%;
   height: 3.5rem;
-  background-color: #61b120;
+  background-color: #93D35F;
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
@@ -72,7 +72,7 @@ form {
 
 .main-header__item a, .main-header__item button {
   text-decoration: none;
-  color: white;
+  color: #085731;
   font-family: 'Spartan', sans-serif;
 }
 
@@ -83,10 +83,14 @@ form {
   cursor: pointer;}
 
 .main-header__item a:hover,
-.main-header__item a:active,
-.main-header__item a.active,
 .main-header__item button:hover,
 .main-header__item button:active {
+  color: #008394;
+  font-weight: 600;
+}
+
+.main-header__item a:active,
+.main-header__item a.active {
   color: #006370;
   font-weight: 600;
 }
@@ -98,7 +102,7 @@ form {
   position: fixed;
   left: 0;
   top: 0;
-  background: white;
+  background: #b1d693;
   z-index: 10;
   padding: 2rem 1rem 1rem 2rem;
   transform: translateX(-100%);
@@ -125,19 +129,48 @@ form {
 .mobile-nav__item a,
 .mobile-nav__item button {
   text-decoration: none;
-  color: black;
-  font-size: 1.5rem;
-  padding: 0.5rem 2rem;
+  color: #003b42;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.mobile-nav__item button {
+  background-color:#003b42;
+  color: white;
+  border-radius: 3px;
+  transition: all .3s ease-out;
+}
+
+.mobile-nav__item i {
+  padding: 0;
+  font-size: 32px;
+  transition: all .3s ease-out;
 }
 
 .mobile-nav__item a:active,
-.mobile-nav__item a:hover,
-.mobile-nav__item a.active,
-.mobile-nav__item button:hover,
-.mobile-nav__item button.active {
-  background: #00695c;
-  color: white;
+.mobile-nav__item a.active {
+  color: #006370;
   border-radius: 3px;
+  font-weight: bold;
+  transition: all .3s ease-out;
+}
+
+.mobile-nav__item i:hover  {
+  color: #006370;
+  transform: scale(1.1);
+}
+
+.mobile-nav__item button:hover {
+  background-color: #006370;
+  color: white;
+  transform: scale(1.1);
+}
+
+.mobile-nav__item a:hover {
+  color: #008394;
+  letter-spacing: 3px;
+  transition: all .3s ease-out;
 }
 
 h1.shopName {
@@ -159,13 +192,16 @@ h1.shopName {
 }
 
 #side-menu-toggle {
-  border: 1px solid white;
+  border: 2px solid #003b42;
+  border-radius: 3px;
   font: inherit;
+  font-weight: bold;
   padding: 0.5rem;
   display: block;
   background: transparent;
-  color: white;
+  color: #003b42;
   cursor: pointer;
+  transition: all .3s ease-out;
 }
 
 #side-menu-toggle:focus {
@@ -174,8 +210,12 @@ h1.shopName {
 
 #side-menu-toggle:active,
 #side-menu-toggle:hover {
-  color: #ffeb3b;
-  border-color: #ffeb3b;
+  background-color: #008394;
+  color: white;
+  font-weight: 400;
+  border-color: #008394;
+  letter-spacing: 1px;
+  transition: all .3s ease-in-out;
 }
 
 .backdrop {
@@ -214,7 +254,7 @@ h1.shopName {
 }
 
 .card__header {
-  background-color:#006370;
+  background-color:#008394;
   color: white;
   border-radius: 8px 8px 0 0;
 }
@@ -253,19 +293,14 @@ h1.shopName {
   text-align: center;
 }
 
-.card__actions button,
-.card__actions a {
-  margin: 0 0.25rem;
-}
-
 .btn {
   display: inline-block;
   padding: 0.25rem 1rem;
   text-decoration: none;
   font: inherit;
-  border: 1px solid #108696;
-  color: white;
-  background: #00a4b9;
+  border: 1px solid #9AD2CB;
+  color: #003b42;
+  background: #9AD2CB;
   border-radius: 3px;
   cursor: pointer;
   transition: all .3s ease-out;
@@ -277,15 +312,12 @@ h1.shopName {
   color: white;
 }
 
-.btn.danger {
-  color: red;
-  border-color: red;
-}
-
 .btn.danger:hover,
 .btn.danger:active {
-  background: red;
+  background: rgb(117, 0, 55);
+  border: 1px solid rgb(117, 0, 55);
   color: white;
+  transform: scale(1.05);
 }
 
 .message {font-size: .8rem;
@@ -302,6 +334,73 @@ h1.shopName {
   color: rgb(32, 0, 0);
   border-color: red;}
 
+.cartAmount { position: absolute;
+  margin-top: 0;
+  margin-left: -10px;
+  font-weight: bold;
+  font-size: .65rem;
+  background-color: white;
+  padding: 4px 5px 2px 5px;
+  border-radius: 11px;}
+
+.contentArea {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: .25rem;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0rem;
+  color: #006370;
+}
+
+.firstItem {
+  margin-top: 3px;
+}
+
+.infoLabel {
+  font-weight: bold;
+  color: #003b42;
+}
+
+.addressBlock p {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.streetAddress p {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.addressInfo {
+  display: grid;
+  grid-template-columns: 95px auto;
+}
+
+.emailLine {
+  margin-right: 10px;
+}
+
+.updateLink {
+  font-size: .9rem;
+}
+
+.pageTitle {
+  color: #003b42;
+  width: 20rem;
+  max-width: 90%;
+  margin: .75rem auto;
+}
+
+h1 {color: #003b42;}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
@@ -311,3 +410,4 @@ h1.shopName {
     display: none;
   }
 }
+

@@ -10,27 +10,162 @@
         <% if(errorMessage) { %>
             <div class="message error"><%= errorMessage %></div>
         <% } %>
-        <form class="auth-form" action="/signup" method="POST">
-            <div class="form-control">
-                <label for="email">E-Mail</label>
-                <input 
-                    class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
-                type="email" name="email" value="<%= oldInput.email %>" id="email">
-            </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input 
-                    class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
-                    type="password" name="password" value="<%= oldInput.password %>" id="password">
-            </div>
-            <div class="form-control">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <input type="password" 
-                    class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
-                name="confirmPassword" value="<%= oldInput.confirmPassword %>" id="confirmPassword">
-            </div>
-            <button class="btn" type="submit">Create Account</button>
-        </form>
+        <div class="contentArea formArea">
+            <h1 class="pageTitle">Create Account</h1>
+            <form class="auth-form" action="/signup" method="POST">
+                <div class="form-control">
+                    <label for="email">E-Mail</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+                    type="email" name="email" value="<%= oldInput.email %>" id="email">
+                </div>
+                <div class="form-control">
+                    <label for="password">Password</label>
+                    <input 
+                        class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+                        type="password" name="password" value="<%= oldInput.password %>" id="password">
+                </div>
+                <div class="form-control">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="password" 
+                        class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+                    name="confirmPassword" value="<%= oldInput.confirmPassword %>" id="confirmPassword">
+                </div>
+                <div class="optional details">
+                    <p class="hint">Optional Section</p>
+                    <div class="form-control">
+                        <label for="firstname">First Name</label>
+                        <% if(oldInput.firstname) { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'firstname') ? 'invalid' : '' %>"
+                        type="text" name="firstname" value="<%= oldInput.firstname %>" id="firstname">
+                        <% } else { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'firstname') ? 'invalid' : '' %>"
+                        type="text" name="firstname" id="firstname">
+                        <% } %>
+                    </div>
+                    <div class="form-control">
+                        <label for="lastname">Last Name</label>
+                        <% if(oldInput.lastname) { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'lastname') ? 'invalid' : '' %>"
+                        type="text" name="lastname" value="<%= oldInput.lastname %>" id="lastname">
+                        <% } else { %>
+                            <input 
+                            class="<%= validationErrors.find(e => e.param === 'lastname') ? 'invalid' : '' %>"
+                            type="text" name="lastname"  id="lastname">
+                        <% } %>
+                    </div>
+                    <div class="form-control">
+                        <label for="street">Street Address</label>
+                        <% if(oldInput.street) { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : '' %>"
+                            type="text" name="street" value="<%= oldInput.street %>" id="street">
+                        <% } else { %>
+                            <input 
+                            class="<%= validationErrors.find(e => e.param === 'street') ? 'invalid' : '' %>"
+                            type="text" name="street" id="street">
+                        <% } %>
+                    </div>
+                    <div class="form-control">
+                        <label for="line2">Second Line (Suite, Apartment)</label>
+                        <% if(oldInput.line2) { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'line2') ? 'invalid' : '' %>"
+                        type="text" name="line2" value="<%= oldInput.line2 %>" id="line2">
+                        <% } else { %>
+                            <input 
+                            class="<%= validationErrors.find(e => e.param === 'line2') ? 'invalid' : '' %>"
+                        type="text" name="line2" id="line2">
+                            <% } %>
+                    </div>
+                    <div class="form-control">
+                        <label for="city">City</label>
+                        <% if(oldInput.city) { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'city') ? 'invalid' : '' %>"
+                        type="text" name="city" value="<%= oldInput.city %>" id="city">
+                        <% } else { %>
+                            <input 
+                            class="<%= validationErrors.find(e => e.param === 'city') ? 'invalid' : '' %>"
+                        type="text" name="city" id="city">
+                            <% } %>
+                    </div>
+                    <div class="form-control">
+                        <label for="state">State</label>
+                        <select name= "state" id="state" class="<%= validationErrors.find(e => e.param === 'state') ? 'invalid' : '' %>">
+                            <option value="0">Select State</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="DC">District Of Columbia</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select>	
+                    </div>
+                    <div class="form-control">
+                        <label for="zip">Zip Code</label>
+                        <% if(oldInput.zip) { %>
+                        <input 
+                            class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : '' %>"
+                        type="number" name="zip" value="<%= oldInput.state %>" id="zip">
+                        <% } else { %>
+                            <input 
+                            class="<%= validationErrors.find(e => e.param === 'zip') ? 'invalid' : '' %>"
+                        type="number" name="zip" id="zip">
+                            <% } %>
+                    </div>
+                </div>
+                <button class="btn" type="submit">Create Account</button>
+            </form>
+        </div>
     </main>
 <%- include('../includes/end.ejs') %>

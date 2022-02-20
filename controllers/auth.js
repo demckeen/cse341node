@@ -9,6 +9,7 @@ const {
 } = require('express-validator');
 
 const User = require('../models/user');
+const Product = require('../models/product');
 const {
     getEnvironmentData
 } = require('worker_threads');
@@ -30,10 +31,18 @@ exports.getSignup = (req, res, next) => {
         path: '/signup',
         pageTitle: 'Create Account',
         errorMessage: message,
+        cartLength: '',
         oldInput: {
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            firstname: '',
+            lastname: '',
+            street: '',
+            line2: '',
+            city: '',
+            state: '',
+            zip: '',
         },
         validationErrors: []
     })
@@ -43,6 +52,17 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const street = req.body.street;
+    const line2 = req.body.line2;
+    const city = req.body.city;
+    let tempstate = '';
+    if(!firstname) { tempstate = ''}
+        else { tempstate = req.body.state};
+    const state = tempstate;
+    const zip = req.body.zip;
+
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -50,10 +70,18 @@ exports.postSignup = (req, res, next) => {
             path: '/signup',
             pageTitle: 'Create Account',
             errorMessage: errors.array()[0].msg,
+            cartLength: '',
             oldInput: {
                 email: email,
                 password: password,
-                confirmPassword: confirmPassword
+                confirmPassword: confirmPassword,
+                firstname: firstname,
+                lastname: lastname,
+                street: street,
+                line2: line2,
+                city: city,
+                state: state,
+                zip: zip,
             },
             validationErrors: errors.array()
         });
@@ -64,6 +92,17 @@ exports.postSignup = (req, res, next) => {
             const user = new User({
                 email: email,
                 password: hashedPassword,
+                address: {
+                    details: [{
+                        firstname: firstname,
+                        lastname: lastname,
+                        street: street,
+                        line2: line2,
+                        city: city,
+                        state: state,
+                        zip: zip
+                        }],
+                    },
                 cart: {
                     items: []
                 }
@@ -105,7 +144,8 @@ exports.getLogin = (req, res, next) => {
         pageTitle: 'Login',
         errorMessage: errorMessage,
         successMessage: successMessage,
-        oldInput: '',
+        cartLength: '',
+        oldInput: {},
         validationErrors: []
     })
 }
@@ -119,6 +159,7 @@ exports.postLogin = (req, res, next) => {
             path: '/login',
             pageTitle: 'Login',
             errorMessage: errors.array()[0].msg,
+            cartLength: '',
             oldInput: {email: email, password: password},
             validationErrors: errors.array()
         });
@@ -132,6 +173,7 @@ exports.postLogin = (req, res, next) => {
                     path: '/login',
                     pageTitle: 'Login',
                     errorMessage: 'Account with this email does not exist, please try again with new email address.',
+                    cartLength: '',
                     oldInput: {email: email, password: password},
                     validationErrors: [{param: 'email'}]
                 });
@@ -152,6 +194,7 @@ exports.postLogin = (req, res, next) => {
                 path: '/login',
                 pageTitle: 'Login',
                 errorMessage: 'Invalid email or password.',
+                cartLength: '',
                 oldInput: {email: email, password: ''},
                 validationErrors: []
             });
@@ -173,21 +216,36 @@ exports.postLogout = (req, res, next) => {
 
 exports.getReset = (req, res, next) => {
     let errorMessage = req.flash('error');
+        if (errorMessage.length > 0) {
+            errorMessage = errorMessage[0];
+        } else {
+            errorMessage = null;
+        }
     let successMessage = req.flash('success');
-    let message;
-    if (errorMessage.length > 0) {
-        message = errorMessage[0];
-    } else if (successMessage.length > 0) {
-        message = successMessage[0]
-    } else {
-        message = null;
+        if (successMessage.length > 0) {
+            successMessage = successMessage[0];
+        } else {
+            successMessage = null;
+        }
+
+    let cartLength = '';
+    if(req.user) {cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);}
+
+    let email;
+    if(req.user) {
+        email = req.user.email;
     }
 
     res.render('auth/reset', {
         path: '/reset',
         pageTitle: 'Reset Password',
-        errorMessage: message,
-        successMessage: message
+        cartLength: '',
+        successMessage: successMessage,
+        errorMessage: errorMessage,
+        cartLength: cartLength,
+        email: email,
     })
 }
 
@@ -219,9 +277,12 @@ exports.postReset = (req, res, next) => {
                     from: 'danamckeen@gmail.com',
                     subject: 'Your Password',
                     html: `
-                        <p>You requested a password reset.</p>
+                        <p>You requested a password reset.</p> 
                         <p>Click this <a href="http://nodemaxmongoose.herokuapp.com/reset/${token}" >link</a> 
                         to set a new password.</p>`
+                        
+                        // `<p>Click this <a href="http://localhost:3000/reset/${token}" >link</a> 
+                        // to set a new password.</p>`    
                 });
             })
             .catch(err => {
@@ -241,6 +302,9 @@ exports.getNewPassword = (req, res, next) => {
             }
         })
         .then(user => {
+            let cartLength = req.user.cart.items.reduce(function(a,b) {
+                return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+              }, 0);
             let errorMessage = req.flash('error');
             if (errorMessage.length > 0) {
                 errorMessage = errorMessage[0];
@@ -258,6 +322,7 @@ exports.getNewPassword = (req, res, next) => {
                 pageTitle: 'Set Password',
                 errorMessage: errorMessage,
                 successMessage: successMessage,
+                cartLength: cartLength,
                 userId: user._id.toString(),
                 passwordToken: token
             })
@@ -302,3 +367,333 @@ exports.postNewPassword = (req, res, next) => {
             return next(error);
           });
 }
+
+exports.getAccount = (req, res, next) => {
+    const address = req.user.address.details[0];
+    const customer = req.user;
+    const cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);
+        res.render('auth/account', {
+            customer: customer,
+            pageTitle: 'Your Account',
+            path: '/account',
+            address: address,
+            cartLength: cartLength,
+            errorMessage: '',
+            successMessage: '',
+        });
+}
+
+exports.getAddAddress = (req, res, next) => {
+    let cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);
+    res.render('auth/edit-address', {
+      pageTitle: 'Add Address',
+      path: '/add-address',
+      editing: false,
+      hasError: false,
+      errorMessage: null,
+      successMessage: null,
+      cartLength: cartLength,
+      oldInput: {},
+      address: [],
+      validationErrors: []
+    });
+  };
+
+exports.postAddAddress = (req, res, next) => {
+    const errors = validationResult(req);
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const street = req.body.street;
+    const line2 = req.body.line2;
+    const city = req.body.city;
+    const state = req.body.state;
+    const zip = req.body.zip;
+    const user = req.user;
+    const cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);
+    
+    console.log(user);
+      if (!errors.isEmpty()) {
+          return res.status(422).render('auth/edit-address', {
+              path: '/add-address',
+              pageTitle: 'Add Address',
+              editing: false,
+              hasError: true,
+              errorMessage: errors.array()[0].msg,
+              cartLength: cartLength,
+              oldInput: {
+                firstname: firstname,
+                lastname: lastname,
+                street: street,
+                line2: line2,
+                city: city,
+                state: state,
+                zip: zip
+              },
+              validationErrors: errors.array()
+          });
+      }
+
+
+    User.findOne({email: req.user.email})
+        .then(user => {
+        user.address.details[0].firstname = firstname;
+        user.address.details[0].lastname = lastname;
+        user.address.details[0].street = street;
+        user.address.details[0].line2 = line2;
+        user.address.details[0].city = city;
+        user.address.details[0].state = state;
+        user.address.details[0].zip = zip;
+    
+        return user.save()
+        .then(result => {
+          console.log('UPDATED ACCOUNT!');
+          res.redirect('/account');
+        })
+});
+}
+
+exports.getEditAddress = (req, res, next) => {
+    const address = req.user.address.details[0];
+    const cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);
+    res.render('auth/edit-address', {
+      pageTitle: 'Edit Address',
+      path: '/edit-address',
+      editing: true,
+      hasError: false,
+      errorMessage: null,
+      successMessage: null,
+      cartLength: cartLength,
+      oldInput: {
+        firstname: address.firstname,
+        lastname: address.lastname,
+        street: address.street,
+        line2: address.line2,
+        city: address.city,
+        state: address.state,
+        zip: address.zip
+      },
+      address: [],
+      validationErrors: []
+    });
+  };
+
+exports.postEditAddress = (req, res, next) => {
+    const errors = validationResult(req);
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const street = req.body.street;
+    const line2 = req.body.line2;
+    const city = req.body.city;
+    const state = req.body.state;
+    const zip = req.body.zip;
+    const user = req.user;
+    const cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);
+    
+    console.log(user);
+      if (!errors.isEmpty()) {
+          return res.status(422).render('auth/edit-address', {
+              path: '/edit-address',
+              pageTitle: 'Edit Address',
+              editing: true,
+              hasError: true,
+              errorMessage: errors.array()[0].msg,
+              cartLength: cartLength,
+              oldInput: {
+                firstname: firstname,
+                lastname: lastname,
+                street: street,
+                line2: line2,
+                city: city,
+                state: state,
+                zip: zip
+              },
+              validationErrors: errors.array()
+          });
+      }
+
+
+    User.findOne({email: req.user.email})
+        .then(user => {
+        user.address.details[0].firstname = firstname;
+        user.address.details[0].lastname = lastname;
+        user.address.details[0].street = street;
+        user.address.details[0].line2 = line2;
+        user.address.details[0].city = city;
+        user.address.details[0].state = state;
+        user.address.details[0].zip = zip;
+    
+        return user.save()
+        .then(result => {
+          console.log('UPDATED ACCOUNT!');
+          res.redirect('/account');
+        })
+});
+}
+
+exports.getUpdateEmail = (req, res, next) => {
+    const email = req.user.email;
+    const userId = req.user._id;
+    const cartLength = req.user.cart.items.reduce(function(a,b) {
+        return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+      }, 0);
+    res.render('auth/update-email', {
+      pageTitle: 'Update Email',
+      path: '/update-email',
+      editing: true,
+      hasError: false,
+      userId: userId,
+      errorMessage: null,
+      successMessage: null,
+      cartLength: cartLength,
+      oldInput: {
+        email: email
+      },
+      address: [],
+      validationErrors: []
+    });
+  };
+
+
+  exports.postUpdateEmail = (req, res, next) => {
+    const errors = validationResult(req);
+    const newEmail = req.body.email;
+    const userId = req.body.userId;
+    let resetUser;
+
+    if (!errors.isEmpty()) {
+        const cartLength = req.user.cart.items.reduce(function(a,b) {
+            return parseInt(`${a}`) + parseInt(`${b.quantity}`);
+          }, 0);
+        return res.status(422).render('auth/update-email', {
+            pageTitle: 'Update Email',
+            path: '/update-email',
+            editing: true,
+            hasError: false,
+            userId: userId,
+            errorMessage: errors.array()[0].msg,
+            successMessage: null,
+            cartLength: cartLength,
+            oldInput: {
+              email: newEmail
+            },
+            address: [],
+            validationErrors: errors.array()
+          });
+    }
+
+    User.findOne({_id: userId})
+        .then(user => {
+            resetUser = user;
+            resetUser.email = newEmail;
+            return resetUser.save()
+        })
+        .then(result => {
+            req.flash('success', 'Your email has been updated!')
+            res.redirect('/account')
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+          });
+}
+  
+    // User.findOneandUpdate(filter, update, {new: true, upsert: true, rawResult: true}, 
+    //     function(err, doc) {
+    //     if (err) { console.log(err); 
+    //         return res.send(500, {error: err});}
+
+    //     const address = req.user.address.details[0];
+    //     const customer = req.user;
+    //             res.render('auth/account', {
+    //                 customer: customer,
+    //                 pageTitle: 'Your Account',
+    //                 path: '/account',
+    //                 address: address,
+    //                 errorMessage: '',
+    //                 successMessage: 'Successfully saved address information.',
+    //             });
+
+    // })
+  
+  
+    
+// exports.getEditAddress = (req, res, next) => {
+//     User.findOne({email: req.user.email})
+//         .then(user => {
+//         res.render('auth/edit-address', {
+//             pageTitle: 'Edit Address',
+//             path: '/edit-address',
+//             editing: true,
+//             hasError: false,
+//             errorMessage: null,
+//             successMessage: null,
+//             oldInput: {},
+//             address: [],
+//             validationErrors: []
+//         });
+//         })
+//         .catch(err => {
+//         const error = new Error(err);
+//         error.httpStatusCode = 500;
+//         return next(error);
+//         });
+// };
+
+// exports.postEditAddress = (req, res, next) => {
+//     const prodId = req.body.productId;
+//     const updatedTitle = req.body.title;
+//     const updatedPrice = req.body.price;
+//     const updatedImageUrl = req.body.imageUrl;
+//     const updatedDesc = req.body.description;
+
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         return res.status(422).render('admin/edit-product', {
+//             path: '/admin/edit-product',
+//             pageTitle: 'Edit Product',
+//             editing: true,
+//             hasError: true,
+            
+//             errorMessage: errors.array()[0].msg,
+//             product: {
+//                 title: updatedTitle,
+//                 imageUrl: updatedImageUrl,
+//                 description: updatedDesc,
+//                 _id: prodId
+//             },
+//             validationErrors: errors.array()
+//         });
+//     }
+
+//     Product.findById(prodId).then(product => {
+//         if(product.userId.toString() !== req.user._id.toString()) {
+//         return res.redirect('/');
+//         }
+//         product.title = updatedTitle;
+//         product.price = updatedPrice;
+//         product.description = updatedDesc;
+//         product.imageUrl = updatedImageUrl;
+//         return product.save()
+//         .then(result => {
+//         console.log('UPDATED PRODUCT!');
+//         res.redirect('/admin/products');
+//         })
+//         .catch(err => {
+//         const error = new Error(err);
+//         error.httpStatusCode = 500;
+//         return next(error);
+//         });
+//     })
+    
+// };

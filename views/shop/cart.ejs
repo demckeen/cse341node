@@ -1,21 +1,37 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/cart.css">
+    <link rel="stylesheet" href="/css/product.css">
     </head>
 
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
+            <% if(cartMessage) { %>
+                <div class="message"><%= cartMessage %></div>
+            <% } %>
             <% if (products.length > 0) { %>
                 <ul class="cart__item-list">
                     <% products.forEach(p => { %>
                         <li class="cart__item">
-                            <h1><%= p.productId.title %></h1>
-                            <h2>Quantity: <%= p.quantity %></h2>
-                            <form action="/cart-reduce-quantity" method="POST">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <input type="hidden" value="<%= p.productId._id %>" name="productId">
-                                <button class="btn danger" type="submit">Delete One</button>
-                            </form>
+                            <a class="detailLink" href="/products/<%= p.productId._id %>" class="productArea">
+                                <h1><%= p.productId.title %></h1>
+                                <img class="cartImg" src="<%= p.productId.imageUrl %>">
+                            </a>
+                            <div class="quantityArea">
+                            <p class="quantityLabel">Quantity:</p>
+                            <div class="wrapper">
+                                <form action="/cart-reduce-quantity" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                                    <button class="plusminus" id="minusBtn" type="submit">-</button>
+                                </form>
+                                <p><%= p.quantity %></p>
+                                <form action="/cart-increase-quantity" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                                    <button class="plusminus" type="submit">+</button>
+                                </form></div>
+                            </div>
                             <form action="/cart-delete-item" method="POST">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <input type="hidden" value="<%= p.productId._id %>" name="productId">
@@ -28,12 +44,14 @@
                 <div class="centered">
                     <form action="/create-order" method="POST">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button type="submit" class="btn">Order Now!</button>
+                        <button type="submit" class="btn">Submit Order</button>
                     </form>
                 </div>
                 
             <% } else { %>
-                <h1>No Products in Cart!</h1>
+                <div class="contentArea">
+                    <h1 class="centered">No Products in Cart!</h1>
+                </div>
             <% } %>
         </main>
         <%- include('../includes/end.ejs') %>

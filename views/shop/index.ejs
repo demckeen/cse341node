@@ -9,6 +9,9 @@
         <% if(successMessage) { %>
             <div class="message"><%= successMessage %></div>
         <% } %>
+        <% if(cartMessage) { %>
+            <div class="message"><%= cartMessage %></div>
+        <% } %>
         <% if (prods.length > 0) { %>
             <div class="grid">
                 <% for (let product of prods) { %>
@@ -37,4 +40,8 @@
             <h1>No Products Found!</h1>
         <% } %>
     </main>
-<%- include('../includes/end.ejs') %>
+<script src="/js/main.js"></script>
+<script src="/js/product.js" type="module"></script>
+</body>
+
+</html>

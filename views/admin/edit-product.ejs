@@ -10,6 +10,8 @@
         <% if(errorMessage) { %>
             <div class="message error"><%= errorMessage %></div>
         <% } %>
+        <div class="contentArea formArea">
+        <h1 class="pageTitle"><%= pageTitle %></h1>
         <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
             <div class="form-control">
                 <label for="title">Title</label>
@@ -40,6 +42,6 @@
             <% } %>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
-        </form>
+        </form></div>
     </main>
 <%- include('../includes/end.ejs') %>

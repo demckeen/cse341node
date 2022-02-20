@@ -9,11 +9,15 @@
 
 .cart__item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  border-radius: 8px;
+  border:none;
+  padding: 1rem 2rem 1.5rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   margin-bottom: 1rem;
+  background-color: #edfde0;
 }
 
 .cart__item h1,
@@ -21,5 +25,15 @@
   margin-right: 1rem;
   font-size: 1.2rem;
   margin: 0;
+  color: #00454e;
 }
 
+.cart__item .detailLink {
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .cart__item {
+    flex-direction: row;
+  }
+}
