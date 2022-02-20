@@ -1,5 +1,12 @@
-<form action="/cart" method="post">
-    <button class="btn" type="submit">Add to Cart</button>
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-    <input type="hidden" name="productId" value="<%= product._id %>">
+<section>
+<form action="/<% if (detail) { %>cart-detail<% } else { %>cart<% } %>" method="post">
+    <div class="form-control addToCartGrid" >
+        <button type="button" class="plusminus productMinusBtn" >-</button>
+        <input id="itemQuantity" name="quantity" type="number" class="num productInputQuantity" value="1" />
+        <button type="button" class="plusminus productPlusBtn" >+</button>
+        <button class="btn" type="submit">Add to Cart</button>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="productId" value="<%= product._id %>">
+    </div>
 </form>
+</section>

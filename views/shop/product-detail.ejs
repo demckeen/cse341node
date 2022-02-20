@@ -1,18 +1,43 @@
 <%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <script>
+    
+        function closeCartMessage() {
+            console.log('Event triggered!');
+            document.getElementById('messageContainer').style.display = 'none';
+            document.getElementById()
+            console.log('Modal closed!')
+        
+        }</script>
     </head>
 
     <body>
         <%- include('../includes/navigation.ejs') %>
-        <main class="centered">
-            <h1><%= product.title %></h1>
-            <hr>
-            <div class="image">
-                <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+        
+        <% if(cartMessage) { %>
+            <div class="messageContainer" id="messageContainer">
+                <div class="cartMessage"><%= cartMessage %><button type="submit" class="close" onclick="closeCartMessage()"><i class="fas fa-window-close"></i></button></div>
             </div>
-            <h2><%= product.price %></h2>
-            <p><%= product.description %></p>
-            <% if(isAuthenticated) { %> 
-                <%- include('../includes/add-to-cart.ejs') %>
-            <% } %> 
+        <% } %>
+        <main class="centered">
+            <div class="titleArea">
+                <h1><%= product.title %></h1>
+            </div>
+            <div class="detailPage">
+                
+                <div class="image">
+                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                </div>
+                <h2 class="productPrice">$<%= product.price %></h2>
+                <p><%= product.description %></p>
+                <% if(isAuthenticated) { %> 
+                    <%- include('../includes/add-to-cart.ejs') %>
+                <% } else { %>
+                    <a href="/login">Log in to add items to cart</a>
+                <% } %>
+            </div>
         </main>
-        <%- include('../includes/end.ejs') %>
+        <script defer src="/js/product.js"></script>
+    </body>
+    
+    </html>

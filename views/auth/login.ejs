@@ -12,25 +12,27 @@
         <% } else if (successMessage) { %>
             <div class="message"><%= successMessage %></div>
         <% } %>
-        <form class="auth-form" action="/login" method="POST">
-            <div class="form-control">
-                <label for="email">E-Mail</label>
-                <input 
-                class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
-                type="email" name="email" value="<%= oldInput.email %>" id="email">
+        <div class="contentArea formArea">
+            <h1 class="pageTitle">Login</h1>
+            <form class="auth-form" action="/login" method="POST">
+                <div class="form-control">
+                    <label for="email">E-Mail</label>
+                    <input 
+                    class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+                    type="email" name="email" value="<%= oldInput.email %>" id="email">
+                </div>
+                <div class="form-control">
+                    <label for="password">Password</label>
+                    <input 
+                    class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+                    type="password" name="password" value="<%= oldInput.password %>" id="password">
+                </div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn" type="submit">Login</button>
+            </form>
+            <div class="resetLink">
+                <a href="/reset">Reset Password</a>
             </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input 
-                class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
-                type="password" name="password" value="<%= oldInput.password %>" id="password">
-            </div>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button class="btn" type="submit">Login</button>
-        </form>
-        <div class="centered">
-            <a href="/reset">Reset Password</a>
         </div>
-        
     </main>
 <%- include('../includes/end.ejs') %>

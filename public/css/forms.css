@@ -1,5 +1,6 @@
 .form-control {
   margin: 1rem 0;
+  color: #003b42;
 }
 
 .form-control label,
@@ -7,23 +8,69 @@
 .form-control textarea {
   display: block;
   width: 100%;
-  margin-bottom: 0.25rem;
 }
 
 .form-control input,
-.form-control textarea {
-  border: 1px solid #a1a1a1;
+.form-control textarea, 
+.form-control select {
+  border: 1px solid #d2dcdd;
   font: inherit;
+  height: 36px;
   border-radius: 2px;
+  font-size: .95rem;
+  padding: 0 5px 0 10px;
 }
 
 .form-control input:focus,
 .form-control textarea:focus {
-  outline-color: #00695c;
+  outline-color: #006370;
 }
 
 .form-control input.invalid,
 .form-control textarea.invalid
 {
   border-color: red;
+}
+
+.form-control label {
+  font-size: .9rem;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+div.formArea {
+    width: 28rem;
+    max-width: 95%;
+    margin: auto;
+    display: block;}
+
+.resetLink {
+  width: 20rem;
+    max-width: 90%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: -5px;
+    font-size: .9rem;
+}
+
+.formArea legend{
+  color: #006370;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: -1rem;
+}
+
+.formArea .optional {
+  background-color:#bfdbdf;
+  padding: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.formArea .hint {
+  margin: 0;
+  font-size: .8rem;
+  font-style: italic;
 }

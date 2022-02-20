@@ -11,6 +11,38 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    
+    address: {
+        details: [{
+            firstname: {
+                type: String,
+                required: false,
+            },
+            lastname: {
+                type: String,
+                required: false,
+            },
+            street: {
+                type: String,
+                required: false,},
+            line2: {
+                type: String,
+                required: false,
+            },
+            city: {
+                type: String,
+                required: false,
+            },
+            state: {
+                    type: String,
+                    required: false,
+                },
+            zip: {
+                    type: String,
+                    required: false,
+                }
+            }]
+    },
     resetToken: String,
     resetTokenExpiration: Date,
     cart: {
@@ -28,15 +60,20 @@ const userSchema = new Schema({
     }
 });
 
-userSchema.methods.addToCart = function (product) {
+userSchema.methods.addToCart = function (product, quantity) {
+    console.log(quantity);
+    if(parseInt(quantity) === 0) {
+        return;
+    }
+    else {
     const cartProductIndex = this.cart.items.findIndex(cp => {
         return cp.productId.toString() === product._id.toString();
     });
-    let newQuantity = 1;
+    let newQuantity = quantity;
     const updatedCartItems = [...this.cart.items];
 
     if (cartProductIndex >= 0) {
-        newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+        newQuantity = parseInt(this.cart.items[cartProductIndex].quantity) + parseInt(newQuantity);
         updatedCartItems[cartProductIndex].quantity = newQuantity;
     } else {
         updatedCartItems.push({
@@ -48,7 +85,7 @@ userSchema.methods.addToCart = function (product) {
         items: updatedCartItems
     };
     this.cart = updatedCart;
-    return this.save();
+    return this.save();}
 
 }
 
@@ -68,6 +105,15 @@ userSchema.methods.deleteOneFromCart = function(productId) {
         this.cart.items = updatedCartItems;
         return this.save();
     }
+}
+
+userSchema.methods.addOneToCart = function(productId) {
+    const addItem = this.cart.items.filter(item => {
+        return item.productId.toString() === productId.toString();
+    });
+    console.log(addItem[0].quantity);
+    addItem[0].quantity = addItem[0].quantity +1;
+        return this.save();
 }
 
 userSchema.methods.removeFromCart = function(productId) {

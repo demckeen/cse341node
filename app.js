@@ -43,7 +43,7 @@ const authRoutes = require('./routes/auth');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: 'somethinghere', resave: false, saveUninitialized: false, store: store}));
+app.use(session({secret: 'somethinghere', resave: false, saveUninitialized: false, store: store, sameSite: "lax"}));
 app.use(csrfProtection);
 app.use(flash());
 
@@ -84,8 +84,15 @@ app.get('/500', errorController.get500);
 app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
+  console.log(error);
+  csrfToken = req.csrfToken();
+  console.log(req.body);
   res.status(500).render('500', { pageTitle: 'Error Occurred', path: '/500',
-  isAuthenticated: req.session.isLoggedIn });
+  isAuthenticated: req.session.isLoggedIn,
+  csrfToken: csrfToken,
+  cartLength: '',
+ });
+  
 });
 
 mongoose

@@ -12,7 +12,11 @@
 .orders__item {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   padding: 1rem;
-  margin-bottom: 1rem;
+  background-color: white;
+  max-width: 400px;
+  border-radius: 8px;
+  border: none;
+  margin: 1rem auto;
 }
 
 .orders__products {
@@ -24,6 +28,11 @@
 .orders__products-item {
     margin: 0.5rem 0;
     padding: 0.5rem;
-    border: 1px solid #00695c;
-    color: #00695c;
+    border: 1px solid #006370;
+    color: #003b42;
+    border-radius: 3px;
+}
+
+.orderProductLink {
+  text-decoration: none;
 }

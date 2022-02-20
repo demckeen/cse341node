@@ -9,15 +9,16 @@
                 <div class="message"><%= successMessage %></div>
             <% } %>
             <% if (orders.length <= 0) { %>
-                <h1>Nothing there!</h1>
+                <h1 class="centered">Nothing there!</h1>
             <% } else { %>
+                <h1 class="centered pageTitle">Your Orders</h1>
                 <ul class="orders">
                     <% orders.forEach(order => { %>
                         <li class="orders__item">
-                            <h1>Order - # <%= order._id %></h1>
+                            <h1 class="subtitle">Order - # <%= order._id %></h1>
                             <ul class="orders__products">
                                 <% order.products.forEach(p => { %>
-                                    <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
+                                    <a class="orderProductLink" href="/products/<%= p.product._id %>"><li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li></a>
                                 <% }); %>
                             </ul>
                         </li>
