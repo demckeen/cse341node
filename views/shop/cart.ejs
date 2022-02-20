@@ -29,7 +29,7 @@
                                 <form action="/cart-increase-quantity" method="POST">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <input type="hidden" value="<%= p.productId._id %>" name="productId">
-                                    <button class="plusminus" type="submit">+</button>
+                                    <button class="plusminus" id="plusBtn" type="submit">+</button>
                                 </form></div>
                             </div>
                             <form action="/cart-delete-item" method="POST">
